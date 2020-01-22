@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="figure">
+    <img src="{{ image_url }}" alt=""/> 
+</section>
+{% endblock %}
+
+<!-- maybe the image and parameters could be a hole block that fits to the users device height -->
+
+{% block bottom %}
+
+<form method="post" class="parameters">
+    <div class="param-vars">
+        <div class="input">
+            <label for="pred_from">Predict from:</label>
+            <input type="text" name="pred_from" id="pred_from">
+        </div>
+        <div class="input">    
+            <label for="pred_to">Predict to:</label>
+            <input type="text" name="pred_to" id="pred_to">
+        </div>
+        <div class="input">    
+            <label for="low_perc">Low Percent:</label>
+            <input type="value" value=5 name="low_perc" id="low_perc">
+        </div>
+        <div class="input">    
+            <label for="high_perc">High Percent:</label>
+            <input type="value" value=95 name="high_perc" id="high_perc">
+        </div>
+    </div>
+    <input type="submit" value="Plot" class="button">
+  </form>
+{% endblock %}
