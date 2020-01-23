@@ -26,17 +26,41 @@ n_sim = 101
 
 bp = Blueprint('graphic', __name__)
 
-@bp.route('/')
+@bp.route('/', methods=('GET', 'POST'))
+@bp.route('/bitcoin', methods=('GET', 'POST'))
 def index():
+    if request.method == 'POST':
+        start_date = request.form['pred_from']
+        months = request.form['pred_to']
+        min_ci = request.form['low_perc']
+        max_ci = request.form['high_perc']
+
+        parameters = (start_date, months, [min_ci, max_ci])
+        return redirect(url_for('index', month=months, start=start_date, minci=min_ci, maxci=max_ci)) # Not working :(
+    
+    months = request.args.get('month')
+    start_date = request.args.get('start')
+    min_ci = request.args.get('minci')
+    max_ci = request.args.get('maxci')
+
+    try:
+        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        months = int(months)
+        min_ci = int(min_ci)
+        max_ci = int(max_ci)
+        params = (start_date, months, [min_ci, max_ci])
+    except:
+        params = (None,)
 
     #Create plot
-    fig_code = plot_prediction('bitcoin')
-    fig_path = '{:09d}'.format(fig_code) + '.png'
+    if all(params):
+        fig_code = plot_prediction('bitcoin', *params)
+    else:
+        fig_code = plot_prediction('bitcoin')
+    
+    fig_path = '{:012d}'.format(fig_code) + '.png'
 
     return render_template('cryptos/bitcoin.html', image_url='/static/images/temp/' + fig_path)
-    
-    #Delete plot
-    delete_image(fig_code)
 
 
 #--------------------- Functions to generate the plot ---------------------
@@ -142,6 +166,11 @@ def plot_prediction(crypto, start_date=datetime(2018, 2, 1), months=3, ci=[0, 90
     plt.fill_between(dates.num_date, quantiles[0], quantiles[1], alpha=0.5, color='#95a5a6')
     plt.fill_between(dates.num_date, quantiles_with_resid[0], quantiles_with_resid[1], alpha=0.3, color='#bdc3c7')
 
+    # Make the plot more beatiful
+    locs, labels = plt.yticks()
+    for i in range(len(labels)):
+        labels[i] = str(int(locs[i])) + ' $'
+    plt.yticks(ticks=locs, labels=labels)
     plt.xticks(rotation=45)
     plt.tick_params(labelsize=20)
     plt.xlabel('', size = 30)
@@ -152,11 +181,11 @@ def plot_prediction(crypto, start_date=datetime(2018, 2, 1), months=3, ci=[0, 90
     x1,x2,y1,y2 = plt.axis()
     x1 = num2date(dates.num_date.min())
     x2 = num2date(dates.num_date.max())
-    plt.axis((x1,x2,y1,y2))
+    plt.axis((x1,x2,0,y2))
 
     #Generate fig name
-    fig_code = randint(0, 999999999)
-    fig_name = '{:09d}'.format(fig_code) + '.png'
+    fig_code = randint(0, 999999999999)
+    fig_name = '{:012d}'.format(fig_code) + '.png'
 
     plt.savefig('visual/static/images/temp/' + fig_name)
     return fig_code
@@ -171,7 +200,7 @@ def delete_image(fig_code):
     returns: None
     """
     print('The delete function does not work')
-    fig_name = '{:09d}'.format(fig_code) + '.png'
+    fig_name = '{:012d}'.format(fig_code) + '.png'
     fig_path = 'visual/static/images/temp/' + fig_name
     remove(fig_path)
 

@@ -2,9 +2,16 @@
 <title>{% block title %}{% endblock %}</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
+    <ul class="menu">
+        <li>Bitcoin</li>
+        <li>Ethereum</li>
+        <li>Ripple (XRP)</li>
+        <li>Bitcoin Cash</li>
+        <li>BSV</li>
+    </ul>
 </nav>
 <div class="hero">
-    <h1>{% block hero %}{% endblock %}</h1>
+    {% block hero %}{% endblock %}
 </div>
 
 {% block content %}{% endblock %}
