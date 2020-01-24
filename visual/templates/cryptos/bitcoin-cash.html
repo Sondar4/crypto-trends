@@ -1,0 +1,48 @@
+{% extends "trend.html" %}
+
+{% block title %}Bitcoinc Cash Price Evolution{% endblock %}
+
+{% block style %}
+<style>
+    nav {
+        background-color: #192a56;
+        border-bottom: 2px solid #152347;
+    }
+    .hero {
+        background-color: #273c75;
+    }
+    .hero h1 {
+        color: #e1b12c;
+    }
+    .parameters {
+        background-color: #273c75;
+    }
+    .menu > li a:link,
+    .menu > li a:visited,
+    .menu > li a:active,
+    .menu > li a:visited:active {
+        color: #44bd32;
+    }
+    .menu > li a:hover,
+    .menu > li a:visited:hover {
+        color: #4cd137;
+    }
+    .input label {
+        color: #dcdde1;
+    }
+    .button {
+        color: #e84118;
+        box-shadow: 0 3px 0 #c23616;
+    }
+    .button:hover,
+    .button:visited:hover {
+        color: #EE5A24;
+        box-shadow: 0 2px #EE5A24;
+    }
+</style>
+{% endblock %}
+
+{% block hero %}
+<img src="/static/images/bcash.png" alt="Bitcoin cash icon">
+<h1>Bitcoin Cash Price Evolution</h1>
+{% endblock %}

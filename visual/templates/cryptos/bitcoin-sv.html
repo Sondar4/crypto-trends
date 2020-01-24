@@ -1,0 +1,48 @@
+{% extends "trend.html" %}
+
+{% block title %}Bitcoin SV Price Evolution{% endblock %}
+
+{% block style %}
+<style>
+    nav {
+        background-color: #1e272e;
+        border-bottom: 2px solid #12171b;
+    }
+    .hero {
+        background-color: #485460;
+    }
+    .hero h1 {
+        color: #ffffff;
+    }
+    .parameters {
+        background-color: #485460;
+    }
+    .menu > li a:link,
+    .menu > li a:visited,
+    .menu > li a:active,
+    .menu > li a:visited:active {
+        color: #05c46b;
+    }
+    .menu > li a:hover,
+    .menu > li a:visited:hover {
+        color: #0be881;
+    }
+    .input label {
+        color: #d2dae2;
+    }
+    .button {
+        color: #ff3f34;
+        box-shadow: 0 3px 0 #ff3f34;
+    }
+    .button:hover,
+    .button:visited:hover {
+        color: #ff5e57;
+        box-shadow: 0 2px #ff5e57;
+    }
+</style>
+{% endblock %}
+
+{% block hero %}
+<img src="/static/images/bsv.png" alt="Bitcoin SV icon">
+<h1>Bitcoin SV Price Evolution</h1>
+{% endblock %}

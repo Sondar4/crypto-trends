@@ -1,0 +1,48 @@
+{% extends "trend.html" %}
+
+{% block title %}Ethereum Price Evolution{% endblock %}
+
+{% block style %}
+<style>
+    nav {
+        background-color: #535c68;
+        border-bottom: 2px solid #444b55;
+    }
+    .hero {
+        background-color: #95afc0;
+    }
+    .hero h1 {
+        color: #130f40;
+    }
+    .parameters {
+        background-color: #95afc0;
+    }
+    .menu > li a:link,
+    .menu > li a:visited,
+    .menu > li a:active,
+    .menu > li a:visited:active {
+        color: #6ab04c;
+    }
+    .menu > li a:hover,
+    .menu > li a:visited:hover {
+        color: #badc58;
+    }
+    .input label {
+        color: #dff9fb;
+    }
+    .button {
+        color: #eb4d4b;
+        box-shadow: 0 3px 0 #eb4d4b;
+    }
+    .button:hover,
+    .button:visited:hover {
+        color: #ff7979;
+        box-shadow: 0 2px #ff7979;
+    }
+</style>
+{% endblock %}
+
+{% block hero %}
+<img src="/static/images/ethereum.png" alt="Ethereum icon">
+<h1>Ethereum Price Evolution</h1>
+{% endblock %}

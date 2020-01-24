@@ -74,13 +74,27 @@ nav {
     justify-content: space-around;
     list-style: none;
     font-family: 'Roboto', sans-serif;
-    color: #2ecc71;
     letter-spacing: 0.5px;
 }
 
 .menu > li{
     width: 120px;
 }
+
+.menu > li a:link,
+.menu > li a:visited,
+.menu > li a:active,
+.menu > li a:visited:active {
+    color: #27ae60;
+    text-decoration: none;
+}
+
+.menu > li a:hover,
+.menu > li a:visited:hover {
+    color: #2ecc71;
+    text-decoration: none;
+}
+
 
 .hero {
     height: 90px;
@@ -140,7 +154,6 @@ section {
     flex-wrap: wrap;
     align-items: center;
     
-    color: #e67e22;
     letter-spacing: 0.5px;
 }
 

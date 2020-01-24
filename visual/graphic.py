@@ -36,7 +36,7 @@ def index():
         max_ci = request.form['high_perc']
 
         parameters = (start_date, months, [min_ci, max_ci])
-        return redirect(url_for('index', month=months, start=start_date, minci=min_ci, maxci=max_ci)) # Not working :(
+        return redirect(url_for('index', month=months, start=start_date, minci=min_ci, maxci=max_ci))
     
     months = request.args.get('month')
     start_date = request.args.get('start')
@@ -55,12 +55,146 @@ def index():
     #Create plot
     if all(params):
         fig_code = plot_prediction('bitcoin', *params)
+        fig_path = '{:012d}'.format(fig_code) + '.png'
+        return render_template('cryptos/bitcoin.html', image_url='/static/images/temp/' + fig_path)
     else:
-        fig_code = plot_prediction('bitcoin')
-    
-    fig_path = '{:012d}'.format(fig_code) + '.png'
+        return render_template('cryptos/bitcoin.html', image_url='/static/images/plots/default_bitcoin.png')
 
-    return render_template('cryptos/bitcoin.html', image_url='/static/images/temp/' + fig_path)
+
+@bp.route('/ethereum', methods=('GET', 'POST'))
+def ethereum():
+    if request.method == 'POST':
+        start_date = request.form['pred_from']
+        months = request.form['pred_to']
+        min_ci = request.form['low_perc']
+        max_ci = request.form['high_perc']
+
+        parameters = (start_date, months, [min_ci, max_ci])
+        return redirect(url_for('graphic.ethereum', month=months, start=start_date, minci=min_ci, maxci=max_ci))
+
+    months = request.args.get('month')
+    start_date = request.args.get('start')
+    min_ci = request.args.get('minci')
+    max_ci = request.args.get('maxci')
+
+    try:
+        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        months = int(months)
+        min_ci = int(min_ci)
+        max_ci = int(max_ci)
+        params = (start_date, months, [min_ci, max_ci])
+    except:
+        params = (None,)
+
+    #Create plot
+    if all(params):
+        fig_code = plot_prediction('ethereum', *params)
+        fig_path = '{:012d}'.format(fig_code) + '.png'
+        return render_template('cryptos/ethereum.html', image_url='/static/images/temp/' + fig_path)
+    else:
+        return render_template('cryptos/ethereum.html', image_url='/static/images/plots/default_ethereum.png')
+
+
+@bp.route('/ripple', methods=('GET', 'POST'))
+def ripple():
+    if request.method == 'POST':
+        start_date = request.form['pred_from']
+        months = request.form['pred_to']
+        min_ci = request.form['low_perc']
+        max_ci = request.form['high_perc']
+
+        parameters = (start_date, months, [min_ci, max_ci])
+        return redirect(url_for('graphic.ripple', month=months, start=start_date, minci=min_ci, maxci=max_ci))
+
+    months = request.args.get('month')
+    start_date = request.args.get('start')
+    min_ci = request.args.get('minci')
+    max_ci = request.args.get('maxci')
+
+    try:
+        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        months = int(months)
+        min_ci = int(min_ci)
+        max_ci = int(max_ci)
+        params = (start_date, months, [min_ci, max_ci])
+    except:
+        params = (None,)
+
+    #Create plot
+    if all(params):
+        fig_code = plot_prediction('ripple', *params)
+        fig_path = '{:012d}'.format(fig_code) + '.png'
+        return render_template('cryptos/ripple.html', image_url='/static/images/temp/' + fig_path)
+    else:
+        return render_template('cryptos/ripple.html', image_url='/static/images/plots/ripple_default.png')
+
+
+@bp.route('/bitcoin-cash', methods=('GET', 'POST'))
+def bitcoinCash():
+    if request.method == 'POST':
+        start_date = request.form['pred_from']
+        months = request.form['pred_to']
+        min_ci = request.form['low_perc']
+        max_ci = request.form['high_perc']
+
+        parameters = (start_date, months, [min_ci, max_ci])
+        return redirect(url_for('graphic.bitcoinCash', month=months, start=start_date, minci=min_ci, maxci=max_ci))
+
+    months = request.args.get('month')
+    start_date = request.args.get('start')
+    min_ci = request.args.get('minci')
+    max_ci = request.args.get('maxci')
+
+    try:
+        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        months = int(months)
+        min_ci = int(min_ci)
+        max_ci = int(max_ci)
+        params = (start_date, months, [min_ci, max_ci])
+    except:
+        params = (None,)
+
+    #Create plot
+    if all(params):
+        fig_code = plot_prediction('bitcoin-cash', *params)
+        fig_path = '{:012d}'.format(fig_code) + '.png'
+        return render_template('cryptos/bitcoin-cash.html', image_url='/static/images/temp/' + fig_path)
+    else:
+        return render_template('cryptos/bitcoin-cash.html', image_url='/static/images/plots/bcash_default.png')
+
+
+@bp.route('/bitcoin-sv', methods=('GET', 'POST'))
+def bitcoinSV():
+    if request.method == 'POST':
+        start_date = request.form['pred_from']
+        months = request.form['pred_to']
+        min_ci = request.form['low_perc']
+        max_ci = request.form['high_perc']
+
+        parameters = (start_date, months, [min_ci, max_ci])
+        return redirect(url_for('graphic.bitcoinSV', month=months, start=start_date, minci=min_ci, maxci=max_ci))
+
+    months = request.args.get('month')
+    start_date = request.args.get('start')
+    min_ci = request.args.get('minci')
+    max_ci = request.args.get('maxci')
+
+    try:
+        start_date = datetime.strptime(start_date, '%Y-%m-%d')
+        months = int(months)
+        min_ci = int(min_ci)
+        max_ci = int(max_ci)
+        params = (start_date, months, [min_ci, max_ci])
+    except:
+        params = (None,)
+
+    #Create plot
+    if all(params):
+        fig_code = plot_prediction('bitcoin-sv', *params)
+        fig_path = '{:012d}'.format(fig_code) + '.png'
+        return render_template('cryptos/bitcoin-sv.html', image_url='/static/images/temp/' + fig_path)
+    else:
+        return render_template('cryptos/bitcoin-sv.html', image_url='/static/images/plots/bsv_default.png')
 
 
 #--------------------- Functions to generate the plot ---------------------
@@ -189,19 +323,3 @@ def plot_prediction(crypto, start_date=datetime(2018, 2, 1), months=3, ci=[0, 90
 
     plt.savefig('visual/static/images/temp/' + fig_name)
     return fig_code
-
-
-def delete_image(fig_code):
-    """Deletes the file with the associated code from the
-    static/images/temp folder.
-
-    code: int
-
-    returns: None
-    """
-    print('The delete function does not work')
-    fig_name = '{:012d}'.format(fig_code) + '.png'
-    fig_path = 'visual/static/images/temp/' + fig_name
-    remove(fig_path)
-
-    return None

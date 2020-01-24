@@ -1,0 +1,48 @@
+{% extends "trend.html" %}
+
+{% block title %}Ripple Price Evolution{% endblock %}
+
+{% block style %}
+<style>
+    nav {
+        background-color: #2f3542;
+        border-bottom: 2px solid #292e3a;
+    }
+    .hero {
+        background-color: #57606f;
+    }
+    .hero h1 {
+        color: #f1f2f6;
+    }
+    .parameters {
+        background-color: #57606f;
+    }
+    .menu > li a:link,
+    .menu > li a:visited,
+    .menu > li a:active,
+    .menu > li a:visited:active {
+        color: #2ed573;
+    }
+    .menu > li a:hover,
+    .menu > li a:visited:hover {
+        color: #7bed9f;
+    }
+    .input label {
+        color: #dfe4ea;
+    }
+    .button {
+        color: #ff4757;
+        box-shadow: 0 3px 0 #ff4757;
+    }
+    .button:hover,
+    .button:visited:hover {
+        color: #ff6b81;
+        box-shadow: 0 2px #ff6b81;
+    }
+</style>
+{% endblock %}
+
+{% block hero %}
+<img src="/static/images/xrp.png" alt="Ripple icon">
+<h1>Ripple (XRP) Price Evolution</h1>
+{% endblock %}

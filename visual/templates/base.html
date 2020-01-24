@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <title>{% block title %}{% endblock %}</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% block style %}{% endblock %}
 <nav>
     <ul class="menu">
-        <li>Bitcoin</li>
-        <li>Ethereum</li>
-        <li>Ripple (XRP)</li>
-        <li>Bitcoin Cash</li>
-        <li>BSV</li>
+        <li><a href="{{url_for('index')}}">Bitcoin</a></li>
+        <li><a href="{{url_for('graphic.ethereum')}}">Ethereum</a></li>
+        <li><a href="{{url_for('graphic.ripple')}}">Ripple (XRP)</a></li>
+        <li><a href="{{url_for('graphic.bitcoinCash')}}">Bitcoin Cash</a></li>
+        <li><a href="{{url_for('graphic.bitcoinSV')}}">BSV</a></li>
     </ul>
 </nav>
 <div class="hero">
