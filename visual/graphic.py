@@ -10,7 +10,6 @@ from werkzeug.exceptions import abort
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 import statsmodels.formula.api as smf
 
 from datetime import datetime
@@ -251,7 +250,6 @@ def plot_prediction(crypto, start_date=datetime(2018, 2, 1), months=3, ci=[0, 90
 
     returns: int, the number associated to the image generated
     """
-    sns.set_style('whitegrid')
     register_matplotlib_converters()
 
     #Load data
@@ -292,7 +290,7 @@ def plot_prediction(crypto, start_date=datetime(2018, 2, 1), months=3, ci=[0, 90
 
     plt.figure(figsize=(20, 14))
 
-    sns.lineplot(x='date', y='close', data=data, color='#2980b9')
+    plt.plot(data.date, data.close, color='#2980b9')
 
     quantiles = PercentileLines(predicts_seq, ci)
     quantiles_with_resid = PercentileLines(predicts_seq_with_res, ci)
