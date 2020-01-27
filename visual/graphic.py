@@ -1,10 +1,6 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, redirect, render_template, request, url_for
 )
-from werkzeug.exceptions import abort
-
-#from flaskr.auth import login_required
-#from flaskr.db import get_db
 
 #--------------------- Imports to generate the plot ---------------------
 import numpy as np
