@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import statsmodels.formula.api as smf
+import seaborn as sns
 
 from datetime import datetime
 from random import randint
@@ -17,6 +18,7 @@ from matplotlib.dates import num2date
 #The number of simulations run to generate the ci
 #A value too high will make the script go slow
 n_sim = 101
+sns.set_style('whitegrid')
 #------------------------------------------------------------------------
 
 bp = Blueprint('graphic', __name__)
@@ -286,7 +288,7 @@ def plot_prediction(crypto, start_date=datetime(2018, 2, 1), months=3, ci=[0, 90
 
     plt.figure(figsize=(20, 14))
 
-    plt.plot(data.date, data.close, color='#2980b9')
+    sns.lineplot(data.date, data.close, color='#2980b9')
 
     quantiles = PercentileLines(predicts_seq, ci)
     quantiles_with_resid = PercentileLines(predicts_seq_with_res, ci)
