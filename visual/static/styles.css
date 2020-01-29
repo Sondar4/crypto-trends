@@ -50,7 +50,7 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     font-weight: 300;
-    font-size: 18px;
+    font-size: 14px;
     line-height: 1.8em;
     color: #bdc3c7;
     font-family: 'Roboto', sans-serif;
@@ -59,7 +59,6 @@ body {
 }
 
 nav {
-    height: 35px;
     background-color: #2c3e50;
     border-bottom: 2px solid #2C3A47;
 }
@@ -71,7 +70,7 @@ nav {
     width: 100%;
 
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     list-style: none;
     font-family: 'Roboto', sans-serif;
     letter-spacing: 0.5px;
@@ -97,9 +96,8 @@ nav {
 
 
 .hero {
-    height: 90px;
     background-color: #34495e;
-    padding: 0 30px;
+    padding: 10px 30px;
 
     display: flex;
     flex-wrap: wrap;
@@ -112,11 +110,14 @@ nav {
     font-family: 'OpenSans', sans-serif;
     font-weight: normal;
     font-style: normal;
+    font-style: normal;
+
+    max-width: 60%;
 }
 
 .hero img {
-    max-height: 80px;
-    max-width: 80px;
+    max-height: 0;
+    max-width: 0;
 }
 
 section {
@@ -153,6 +154,8 @@ section {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: space-between;
+    width: 100%;
     
     letter-spacing: 0.5px;
 }
@@ -170,14 +173,14 @@ section {
 }
 
 .button {
-    margin: 30px 40px 20px 40px;
+    margin: 15px 20px 10px 20px;
     padding: 5px 10px;
     border-radius: 5px;
     background-color: #ecf0f1;
     box-shadow: 0 3px 0 #c0392b;
 
     font-weight: 300;
-    font-size: 22px;
+    font-size: 16px;
     color: #c0392b;
     letter-spacing: 1px;
 }
@@ -191,32 +194,114 @@ section {
 
 .description {
     justify-content: center;
-    padding: 60px 40px 40px 40px;
+    padding: 30px 10px 10px 10px;
     background-color: #2c3e50;
 
     font-family: 'OpenSans', sans-serif;
     color: #bdc3c7;
-    line-height: 1.5em;
+}
+
+.description-text{
+    width: 80%;
 }
 
 .description h1 {
     color: #FFFFFF;
     font-weight: 300;
-    font-size: 2em;
     margin-bottom: 35px;
     font-family: 'OpenSans', sans-serif;
 }
 
 .description ul > li {
-    margin: 25px 0;
+    margin: 10px 0;
+}
+
+@media only screen and (min-width: 767px) and (max-width: 960px){
+    .body{
+        font-size: 16px;
+    }
+    nav{
+        height: 35px;
+    }
+    .menu{
+        justify-content: space-around;
+    }
+    .menu > li{
+        width: auto;
+    }
+    .hero{
+        height: 90px;
+        padding: 0 30px;
+    }
+    .hero img{
+        max-height: 80px;
+        max-width: 80px;
+    }
+    .hero h1{
+        max-width: auto;
+    }
+    .parameters{
+        padding: 20px 70px;
+    }
+    .button{
+        margin: 10px 40px;
+    }
+    .description{
+        padding: 60px 40px 40px 40px;
+        line-height: 1.5em;
+    }
+    .description-text{
+        width: 70%;
+    }
+    .description h1{
+        font-size: 1.5em;
+    }
+    .description ul > li{
+        margin: 25px 0;
+    }
 }
 
 @media only screen and (min-width: 960px){
+    .body{
+        font-size: 18px;
+    }
+    nav{
+        height: 35px;
+    }
+    .menu{
+        justify-content: space-around;
+    }
+    .hero{
+        padding: 0 30px;
+        height: 90px;
+    }
+    .hero img{
+        max-height: 80px;
+        max-width: 80px;
+    }
+    .hero h1{
+        max-width: auto;
+    }
+    .parameters{
+        padding: 10px 40px;
+    }
+    .input{
+        width: auto;
+    }
     .button{
         margin: 10px 40px;
-        font-size: 16px;
+    }
+    .description{
+        padding: 60px 40px 40px 40px;
+        line-height: 1.5em;
     }
     .description-text{
         width: 60%;
+    }
+    .description h1{
+        font-size: 2em;
+    }
+    .description ul > li{
+        margin: 25px 0;
     }
 }
