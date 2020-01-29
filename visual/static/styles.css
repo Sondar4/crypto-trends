@@ -190,8 +190,6 @@ section {
 }
 
 .description {
-    display: flex;
-    flex-wrap: wrap;
     justify-content: center;
     padding: 60px 40px 40px 40px;
     background-color: #2c3e50;
