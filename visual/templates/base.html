@@ -39,3 +39,38 @@
     </div>
     <input type="submit" value="Plot" class="button">
 </form>
+
+<section class="description">
+    <div class="description-text">
+        <h1>So, what is this?</h1>
+        <ul>
+            <li>The graphic you can see above is the variation of the price (in dollars $) of the crypto-currency 
+                in the period that appears in the x-axis of the plot, together with two grey zones which show
+                the trend of the price.
+            </li>
+            <li>The <strong>trend</strong> is calculated with a linear least squares fit of the price on the time. The vertical line 
+                shows the first date taken into account for the fit and it can be modified in the parameters
+                panel.
+            </li>
+            <li>The dark grey area is the <strong>confidence interval</strong> for the
+                trend of the price, whose percentiles can be
+                also modified. It comes from the assumption that the trend determined by the linear fit is ok,
+                but the variation of the price, i.e. the distances from the price to the linear fit, which 
+                are called residuals, are random, so we <strong>simulate</strong> other scenarios by mixing
+                the residuals and then we calculate the trend for each one of these simulated scenarios.
+                Thus, if the lowest percentile is 5% and the 
+                highest 95%, then the dark grey area is the space where 90% of the simulated trends fall.
+            </li>
+            <li>The light grey zone is the <strong>expected variation</strong> of the price from the trend, which is also 
+                calculated by generating scenarios and adding random residuals to the trend.
+            </li>
+            <li>
+                Currently, the number of iterations to calculate the confidence intervals is 100.
+            </li>
+            <li>
+                I made this to consolidate the knlowdge obtained from the book <em>Think Stats 2</em> from Allen B.
+                Downey and the flask tutorial.
+            </li>
+        </div>
+    </ul>
+</section>
