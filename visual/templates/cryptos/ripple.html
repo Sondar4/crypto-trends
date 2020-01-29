@@ -1,4 +1,4 @@
-{% extends "trend.html" %}
+{% extends "base.html" %}
 
 {% block title %}Ripple Price Evolution{% endblock %}
 
@@ -8,6 +8,7 @@
         background-color: #2f3542;
         border-bottom: 2px solid #292e3a;
     }
+
     .hero {
         background-color: #57606f;
     }
@@ -45,4 +46,16 @@
 {% block hero %}
 <img src="/static/images/xrp.png" alt="Ripple icon">
 <h1>Ripple (XRP) Price Evolution</h1>
+{% endblock %}
+
+{% block content %}
+<section class="figure">
+    {% if not params %}
+        <img src="/static/images/plots/ripple_default.png" alt="Ripple price plot"/>
+    {% else %}
+        <img src="{{ url_for('graphic.plot_prediction', crypto='ripple', start_date=params[0],
+                    months=params[1], min_ci=params[2], max_ci=params[3]) }}"
+             alt="Ripple price plot"/>
+    {% endif %}
+</section>
 {% endblock %}

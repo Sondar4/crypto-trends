@@ -1,4 +1,4 @@
-{% extends "trend.html" %}
+{% extends "base.html" %}
 
 {% block title %}Bitcoin Price Evolution{% endblock %}
 
@@ -8,4 +8,16 @@
 {% block hero %}
 <img src="/static/images/bitcoin.png" alt="Bitcoin icon">
 <h1>Bitcoin Price Evolution</h1>
+{% endblock %}
+
+{% block content %}
+<section class="figure">
+    {% if not params %}
+        <img src="/static/images/plots/default_bitcoin.png" alt="Bitcoin price plot"/>
+    {% else %}
+        <img src="{{ url_for('graphic.plot_prediction', crypto='bitcoin', start_date=params[0],
+                    months=params[1], min_ci=params[2], max_ci=params[3]) }}"
+             alt="Bitcoin price plot"/>
+    {% endif %}
+</section>
 {% endblock %}

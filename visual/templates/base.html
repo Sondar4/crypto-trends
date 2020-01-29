@@ -17,5 +17,25 @@
 
 {% block content %}{% endblock %}
 
-{% block bottom %}{% endblock %}
-
+<form method="post" class="parameters">
+    <div class="param-vars">
+        <div class="input">
+            <label for="pred_from">Predict from:</label>
+            <input type="date" name="pred_from" id="pred_from" value="2018-02-01"
+                min="2017-01-01" max="2018-11-30">
+        </div>
+        <div class="input">    
+            <label for="pred_to">Predict months:</label>
+            <input type="value" name="pred_to" value=3 id="pred_to">
+        </div>
+        <div class="input">    
+            <label for="low_perc">Low Percent:</label>
+            <input type="value" value=5 name="low_perc" id="low_perc">
+        </div>
+        <div class="input">
+            <label for="high_perc">High Percent:</label>
+            <input type="value" value=95 name="high_perc" id="high_perc">
+        </div>
+    </div>
+    <input type="submit" value="Plot" class="button">
+</form>

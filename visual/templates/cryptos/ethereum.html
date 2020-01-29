@@ -1,4 +1,4 @@
-{% extends "trend.html" %}
+{% extends "base.html" %}
 
 {% block title %}Ethereum Price Evolution{% endblock %}
 
@@ -45,4 +45,16 @@
 {% block hero %}
 <img src="/static/images/ethereum.png" alt="Ethereum icon">
 <h1>Ethereum Price Evolution</h1>
+{% endblock %}
+
+{% block content %}
+<section class="figure">
+    {% if not params %}
+        <img src="/static/images/plots/default_ethereum.png" alt="Ethereum price plot"/>
+    {% else %}
+        <img src="{{ url_for('graphic.plot_prediction', crypto='ethereum', start_date=params[0],
+                    months=params[1], min_ci=params[2], max_ci=params[3]) }}"
+             alt="Ethereum price plot"/>
+    {% endif %}
+</section>
 {% endblock %}

@@ -1,6 +1,6 @@
-{% extends "trend.html" %}
+{% extends "base.html" %}
 
-{% block title %}Bitcoinc Cash Price Evolution{% endblock %}
+{% block title %}Bitcoin Cash Price Evolution{% endblock %}
 
 {% block style %}
 <style>
@@ -45,4 +45,16 @@
 {% block hero %}
 <img src="/static/images/bcash.png" alt="Bitcoin cash icon">
 <h1>Bitcoin Cash Price Evolution</h1>
+{% endblock %}
+
+{% block content %}
+<section class="figure">
+    {% if not params %}
+        <img src="/static/images/plots/bcash_default.png" alt="Bitcoin cash price plot"/>
+    {% else %}
+        <img src="{{ url_for('graphic.plot_prediction', crypto='bitcoin-cash', start_date=params[0],
+                    months=params[1], min_ci=params[2], max_ci=params[3]) }}"
+             alt="Bitcoin cash price plot"/>
+    {% endif %}
+</section>
 {% endblock %}
