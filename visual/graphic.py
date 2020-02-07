@@ -2,6 +2,8 @@ from flask import (
     Blueprint, redirect, render_template, request, url_for, send_file
 )
 
+from visual.db import get_db
+
 #--------------------- Imports to generate the plot ---------------------
 import numpy as np
 import pandas as pd
@@ -9,16 +11,17 @@ import matplotlib.pyplot as plt
 import statsmodels.formula.api as smf
 import seaborn as sns
 
-from datetime import datetime
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 from random import randint
 from pandas.plotting import register_matplotlib_converters
 from os import remove
 from matplotlib.dates import num2date
 from io import BytesIO
 
-#The number of simulations run to generate the ci
-#A value too high will make the script go slow
-n_sim = 101
+#The number of simulations run to generate the ci.
+#A value too high will make the app go slow.
+N_SIMULATIONS = 101
 #------------------------------------------------------------------------
 
 
@@ -39,7 +42,7 @@ def get_args(args):
     try:
         # We only chekc for type compatibility as they would be
         # converted again to str when passed as arguments in the
-        # template
+        # template.
         datetime.strptime(start_date, '%Y-%m-%d')
         int(min_ci)
         int(max_ci)
@@ -106,67 +109,70 @@ def plot_prediction(crypto, start_date=datetime(2018, 2, 1), months=3, min_ci=0,
     The dark grey zone is the ci for the sampling error.
     The light grey zone is the ci for the sampling error + random variation.
 
-    The graph is saved in static/images/temp as (random_number).png.
+    The graph is passed with an URL as a PNG image.
 
     crypto: string, name of the crypto
     start_date: datetime object, the starting date for the regression
     months: int, the number of months we want to predict
     ci: list of len 2
     """
-
-    #Set parameters
     sns.set_style('whitegrid')
     register_matplotlib_converters()
-    start_date = datetime.strptime(start_date, '%Y-%m-%d')
+
+    # Set the first date from which we make the prediction.
+    start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+
     months = int(months)
     ci = [int(min_ci), int(max_ci)]
 
-    #Load data
-    data_path='cryptos-py.csv'
-    data = pd.read_csv('cryptos-py.csv', usecols=['slug', 'date', 'num_date', 'close'])
-    data = data[data.slug == crypto]
+    db = get_db()
+    data = pd.DataFrame(db.execute(
+        'SELECT date, close_price'
+        ' FROM cryptos'
+        ' WHERE crypto = ?', (crypto,)
+    ).fetchall(), columns=['date', 'close_price'])
+    data['id'] = data.index.values.copy()
 
-    #Transform date strings to datetime objects
-    data['date'] = data.date.apply(datetime.strptime, args=('%Y-%m-%d',)) #This makes the code go slow
-
-    #Make first model
-    formula = "close ~ num_date"
+    # It's the same to make the regression on the id than on the date
+    # converted to an int, so we make it on the id.
+    # Otherwise we would have to transform dates into int type.
+    formula = "close_price ~ id"
     model = smf.ols(formula, data=data[data.date > start_date])
     results = model.fit()
 
-    #Create range of the days for the plot
-    dates = pd.DataFrame()
-    dates['num_date'] = pd.Series(range(months*30 + 365*2))
-    dates['num_date'] += data.num_date.min()
+    first_date = data.date[0]                 # As the series is ordered,
+    last_date = data.date[data.date.size-1]   # this is faster than using min and max.
+    delta_days = days_between(last_date + relativedelta(months=months), first_date)
+    time_df = pd.DataFrame(
+        # This is more efficient than appending rows to a blank dataframe
+        # because on each append pandas make a copy of the table.
+        # With this method we avoid that.
+        [{'id': i, 'date': first_date + timedelta(i)} for i in range(delta_days)]
+    )
 
-    results_seq = []
-    predicts_seq = []
-    predicts_seq_with_res = []
+    fake_results = []
+    fake_predictions = []
+    fake_predictions2 = []
 
-    #Generate n_sim results with mixed data
-    for i in range(n_sim):
-        results_seq.append(GenerateFakeResults(data[data.date > start_date], results))
+    for i in range(N_SIMULATIONS):
+        fake_results.append(generate_fake_results(data[data.date > start_date], results, formula))
+
+        prediction1 = fake_results[i].predict(time_df.id)
+        fake_predictions.append(prediction1)
+
+        # Add mixed residuals.
+        prediction2 = prediction1.copy()
+        prediction2 += np.random.choice(fake_results[i].resid, len(prediction2))
+        fake_predictions2.append(prediction2)
     
-    #Generate predictions from fake results
-    for i in range(n_sim):
-        prediction = results_seq[i].predict(dates.num_date)
-        predicts_seq.append(prediction)
-        
-    #Generate predictions from fake results and add mixed residuals
-    for i in range(n_sim):
-        prediction = results_seq[i].predict(dates.num_date)
-        prediction += np.random.choice(results_seq[i].resid, len(prediction))
-        predicts_seq_with_res.append(prediction)
-
     plt.figure(figsize=(20, 14))
+    sns.lineplot(data.date, data.close_price, color='#2980b9')
 
-    sns.lineplot(data.date, data.close, color='#2980b9')
+    dark_quantiles = percentile_lines(fake_predictions, ci)
+    light_quantiles = percentile_lines(fake_predictions2, ci)
 
-    quantiles = PercentileLines(predicts_seq, ci)
-    quantiles_with_resid = PercentileLines(predicts_seq_with_res, ci)
-
-    plt.fill_between(dates.num_date, quantiles[0], quantiles[1], alpha=0.5, color='#95a5a6')
-    plt.fill_between(dates.num_date, quantiles_with_resid[0], quantiles_with_resid[1], alpha=0.3, color='#bdc3c7')
+    plt.fill_between(time_df.date, dark_quantiles[0], dark_quantiles[1], alpha=0.5, color='#95a5a6')
+    plt.fill_between(time_df.date, light_quantiles[0], light_quantiles[1], alpha=0.3, color='#bdc3c7')
 
     # Make the plot more beatiful
     locs, labels = plt.yticks()
@@ -181,8 +187,8 @@ def plot_prediction(crypto, start_date=datetime(2018, 2, 1), months=3, min_ci=0,
     plt.axvline(start_date, 0, 1, color='#34495e')
 
     x1,x2,y1,y2 = plt.axis()
-    x1 = num2date(dates.num_date.min())
-    x2 = num2date(dates.num_date.max())
+    x1 = time_df.date.min()
+    x2 = time_df.date.max()
     plt.axis((x1,x2,0,y2))
 
     # From: https://stackoverflow.com/questions/20107414/passing-a-matplotlib-figure-to-html-flask
@@ -194,25 +200,31 @@ def plot_prediction(crypto, start_date=datetime(2018, 2, 1), months=3, min_ci=0,
 
 
 #--------------------- Functions to generate the plot ---------------------
+def days_between(d1, d2):
+    """Returns the difference in days between two 
+    datetime objects.
+    """
+    return abs((d2 - d1).days)
 
-def GenerateFakeResults(original, results):
+
+def generate_fake_results(original, results, formula):
     """Generates fake results from fake data.
     Fake data is generated from mixing the resiudals of the fitted model.
     Then the model is trained on this fake data.
     
     original: data used to generate the original results
     results: a fitted least squares model
+    formula: a string with the formula
     
     returns: a fitted least squares model
     """
-    fake = pd.DataFrame(original.num_date.copy())
-    fake['close'] = results.fittedvalues + np.random.choice(results.resid, len(results.resid))
-    formula = "close ~ num_date"
+    fake = pd.DataFrame(original.id.copy())
+    fake['close_price'] = results.fittedvalues + np.random.choice(results.resid, len(results.resid))
     model = smf.ols(formula, data=fake)
     return model.fit()
 
 
-def PercentileLines(lines_seq, percents):
+def percentile_lines(lines_seq, percents):
     """Returns a list with the percentile lines of the lines_seq.
     
     lines_seq: a list of NumPy arrays with the same shape.
@@ -222,7 +234,6 @@ def PercentileLines(lines_seq, percents):
     """
     lines_df = pd.DataFrame(lines_seq)
     quantiles = list() 
-    
     for perc in percents:
         quantiles.append( pd.DataFrame(lines_df).quantile(q=perc/100, axis=0) )
         
