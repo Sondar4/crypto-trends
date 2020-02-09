@@ -102,19 +102,20 @@ def bitcoinSV():
 
 @bp.route('/image_plot/<crypto>/<start_date>/<months>/<min_ci>/<max_ci>', methods=('GET',))
 def plot_prediction(crypto, start_date=datetime(2018, 2, 1), months=3, min_ci=0, max_ci=90):
-    """Generates a graph with the desired crypto values on 2017 and 2018.
+    """Generates a graph of the values on 2017 and 2018 of the chosen crypto.
     Then plots the intervals of confidence for future values using the least
     squares linear regression method.
 
     The dark grey zone is the ci for the sampling error.
     The light grey zone is the ci for the sampling error + random variation.
 
-    The graph is passed with an URL as a PNG image.
+    The graph is returned as an an URL with a PNG image.
 
-    crypto: string, name of the crypto
-    start_date: datetime object, the starting date for the regression
-    months: int, the number of months we want to predict
-    ci: list of len 2
+    crypto: string, name of the crypto.
+    start_date: datetime object, the starting date for the regression.
+    months: int, the number of months we want to predict.
+    min_ci: int, the lower percentile we want to plot.
+    max_ci: int, the higher percentile we want to plot.
     """
     sns.set_style('whitegrid')
     register_matplotlib_converters()

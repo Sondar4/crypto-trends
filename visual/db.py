@@ -1,6 +1,7 @@
-import csv, sqlite3
-
+import sqlite3
 import click
+#import csv
+
 from flask import current_app, g
 from flask.cli import with_appcontext
 
@@ -21,15 +22,15 @@ def close_db(e=None):
     if db is not None:
         db.close()
 
-# Function to initialize the database from scratch
+
 def init_db():
     db = get_db()
 
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
-    
+"""
     #Load csv into database
-    with open('C:/Users/Ramon/Scripts/python/x-visual/cryptos-py.csv','r') as fin:
+    with open(file_path,'r') as fin:
         # csv.DictReader uses first line in file for column headings by default
         names = ['bitcoin-cash', 'bitcoin-sv', 'bitcoin', 'ethereum', 'ripple']
         dr = csv.DictReader(fin) # comma is default delimiter
@@ -37,7 +38,7 @@ def init_db():
 
     db.executemany('INSERT INTO cryptos (crypto, date, close_price) VALUES (?, ?, ?);', to_db)
     db.commit()
-
+"""
 
 @click.command('init-db')
 @with_appcontext

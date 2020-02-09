@@ -48,14 +48,13 @@
 
 
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 300;
-    font-size: 14px;
-    line-height: 1.8em;
-    color: #bdc3c7;
     font-family: 'Roboto', sans-serif;
     font-weight: normal;
     font-style: normal;
+
+    font-size: 14px;
+    line-height: 1.8em;
+    color: #bdc3c7;
 }
 
 nav {
@@ -112,11 +111,6 @@ nav {
     font-style: normal;
 
     max-width: 60%;
-}
-
-.hero img {
-    max-height: 0;
-    max-width: 0;
 }
 
 section {
@@ -231,11 +225,7 @@ section {
     }
     .hero{
         height: 90px;
-        padding: 0 30px;
-    }
-    .hero img{
-        max-height: 80px;
-        max-width: 80px;
+        padding: 0 75px;
     }
     .hero h1{
         max-width: auto;
@@ -272,12 +262,8 @@ section {
         justify-content: space-around;
     }
     .hero{
-        padding: 0 30px;
+        padding: 0 150px;
         height: 90px;
-    }
-    .hero img{
-        max-height: 80px;
-        max-width: 80px;
     }
     .hero h1{
         max-width: auto;
