@@ -21,7 +21,7 @@ from io import BytesIO
 
 #The number of simulations run to generate the ci.
 #A value too high will make the app go slow.
-N_SIMULATIONS = 101
+N_SIMULATIONS = 100
 #------------------------------------------------------------------------
 
 
