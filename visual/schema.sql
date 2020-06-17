@@ -1,8 +1,8 @@
 DROP TABLE IF EXISTS cryptos;
 
-CREATE TABLE cryptos (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    "crypto" VARCHAR(12) NOT NULL,
-    "date" DATE NOT NULL,
-    "close_price" REAL NOT NULL
+CREATE TABLE IF NOT EXISTS cryptos (
+    crypto VARCHAR(12) NOT NULL,
+    dt DATE NOT NULL,
+    close_price DECIMAL(10, 5) NOT NULL,
+    PRIMARY KEY (crypto, dt)
 );

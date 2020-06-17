@@ -128,7 +128,7 @@ def plot_prediction(crypto, start_date=datetime(2018, 2, 1), months=3, min_ci=0,
 
     db = get_db()
     data = pd.DataFrame(db.execute(
-        'SELECT date, close_price'
+        'SELECT dt, close_price'
         ' FROM cryptos'
         ' WHERE crypto = ?', (crypto,)
     ).fetchall(), columns=['date', 'close_price'])

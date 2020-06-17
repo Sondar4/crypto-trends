@@ -1,6 +1,7 @@
 import sqlite3
 import click
-#import csv
+import yfinance as yf
+from datetime import datetime
 
 from flask import current_app, g
 from flask.cli import with_appcontext
@@ -28,17 +29,22 @@ def init_db():
 
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
-"""
-    #Load csv into database
-    with open(file_path,'r') as fin:
-        # csv.DictReader uses first line in file for column headings by default
-        names = ['bitcoin-cash', 'bitcoin-sv', 'bitcoin', 'ethereum', 'ripple']
-        dr = csv.DictReader(fin) # comma is default delimiter
-        to_db = [(i['slug'], i['date'], i['close']) for i in dr if i['slug'] in names]
 
-    db.executemany('INSERT INTO cryptos (crypto, date, close_price) VALUES (?, ?, ?);', to_db)
-    db.commit()
-"""
+    # Get data From yahoo finance
+    yf_codes = ['BTC-USD', 'ETH-USD', 'XRP-USD', 'BCH-USD']
+    codes_dict = {'BTC-USD': 'bitcoin', 'ETH-USD': 'ethereum',
+                  'XRP-USD': 'ripple', 'BCH-USD': 'bitcoin-cash'}
+    for code in yf_codes:
+        crypto = codes_dict[code]
+        t = yf.Ticker(code)
+        h = t.history(period='max')
+        h['Date'] = h.index
+        vals = [(crypto, h.iloc[i].Date.strftime('%Y-%m-%d %H:%M:%S'), h.iloc[i].Close) for i in range(h.shape[0])]
+        db.executemany('INSERT INTO cryptos (crypto, dt, close_price) VALUES (?, ?, ?);', vals)
+        db.commit()
+
+    #TODO: get data from btc-sv 
+
 
 @click.command('init-db')
 @with_appcontext
