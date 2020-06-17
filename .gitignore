@@ -15,4 +15,4 @@ build/
 *.egg-info/
 
 visual/static/images/temp/*
-instance/*
+instance/*.sqlite
