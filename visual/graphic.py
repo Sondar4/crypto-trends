@@ -127,11 +127,13 @@ def plot_prediction(crypto, start_date=datetime(2018, 2, 1), months=3, min_ci=0,
     ci = [int(min_ci), int(max_ci)]
 
     db = get_db()
+
     data = pd.DataFrame(db.execute(
         'SELECT dt, close_price'
         ' FROM cryptos'
         ' WHERE crypto = ?', (crypto,)
     ).fetchall(), columns=['date', 'close_price'])
+
     data['id'] = data.index.values.copy()
 
     # It's the same to make the regression on the id than on the date
@@ -187,7 +189,7 @@ def plot_prediction(crypto, start_date=datetime(2018, 2, 1), months=3, min_ci=0,
     
     plt.axvline(start_date, 0, 1, color='#34495e')
 
-    x1,x2,y1,y2 = plt.axis()
+    x1,x2,_,y2 = plt.axis()
     x1 = time_df.date.min()
     x2 = time_df.date.max()
     plt.axis((x1,x2,0,y2))

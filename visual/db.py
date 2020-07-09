@@ -1,7 +1,6 @@
 import sqlite3
 import click
 import yfinance as yf
-from datetime import datetime
 
 from flask import current_app, g
 from flask.cli import with_appcontext
@@ -39,11 +38,12 @@ def init_db():
         t = yf.Ticker(code)
         h = t.history(period='max')
         h['Date'] = h.index
-        vals = [(crypto, h.iloc[i].Date.strftime('%Y-%m-%d %H:%M:%S'), h.iloc[i].Close) for i in range(h.shape[0])]
+        h['Date'] = h['Date'].dt.strftime('%y-%M-%D %H:%M:%S')
+        vals = [(crypto, row.Date, row.Close) for (_, row) in h.iterrows()]
         db.executemany('INSERT INTO cryptos (crypto, dt, close_price) VALUES (?, ?, ?);', vals)
         db.commit()
 
-    #TODO: get data from btc-sv 
+    #TODO: get data of btc-sv 
 
 
 @click.command('init-db')
