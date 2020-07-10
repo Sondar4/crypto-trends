@@ -38,7 +38,7 @@ def init_db():
         t = yf.Ticker(code)
         h = t.history(period='max')
         h['Date'] = h.index
-        h['Date'] = h['Date'].dt.strftime('%y-%M-%D %H:%M:%S')
+        h['Date'] = h['Date'].dt.strftime('%Y-%m-%d %H:%M:%S')
         vals = [(crypto, row.Date, row.Close) for (_, row) in h.iterrows()]
         db.executemany('INSERT INTO cryptos (crypto, dt, close_price) VALUES (?, ?, ?);', vals)
         db.commit()

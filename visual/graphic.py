@@ -135,6 +135,7 @@ def plot_prediction(crypto, start_date=datetime(2018, 2, 1), months=3, min_ci=0,
     ).fetchall(), columns=['date', 'close_price'])
 
     data['id'] = data.index.values.copy()
+    data['date'] = pd.to_datetime(data['date'])
 
     # It's the same to make the regression on the id than on the date
     # converted to an int, so we make it on the id.

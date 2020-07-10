@@ -12,3 +12,4 @@ build/
 visual/static/images/temp/*
 instance/*.sqlite
 .profile
+TODO.txt
