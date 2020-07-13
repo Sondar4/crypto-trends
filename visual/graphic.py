@@ -91,13 +91,13 @@ def bitcoinCash():
     return render_template('cryptos/bitcoin-cash.html', params=get_args(request.args))
 
 
-@bp.route('/bitcoin-sv', methods=('GET', 'POST'))
-def bitcoinSV():
+@bp.route('/litecoin', methods=('GET', 'POST'))
+def litecoin():
     if request.method == 'POST':
         form = get_form(request.form)
-        return redirect(url_for('graphic.bitcoinSV', month=form[0], start=form[1], minci=form[2], maxci=form[3]))
+        return redirect(url_for('graphic.litecoin', month=form[0], start=form[1], minci=form[2], maxci=form[3]))
     
-    return render_template('cryptos/bitcoin-sv.html', params=get_args(request.args))
+    return render_template('cryptos/litecoin.html', params=get_args(request.args))
 
 
 @bp.route('/image_plot/<crypto>/<start_date>/<months>/<min_ci>/<max_ci>', methods=('GET',))

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Bitcoin SV Price Evolution{% endblock %}
+{% block title %}Litecoin Price Evolution{% endblock %}
 <!-- Swedish palette -->
 {% block style %}
 <style>
@@ -49,17 +49,17 @@
 {% endblock %}
 
 {% block hero %}
-<h1>Bitcoin SV Price Evolution</h1>
+<h1>Litecoin Price Evolution</h1>
 {% endblock %}
 
 {% block content %}
 <section class="figure">
     {% if not params %}
-        <img src="/static/images/plots/bsv_default.png" alt="BSV price plot"/>
+        <img src="/static/images/plots/litecoin_default.png" alt="Litecoin price plot"/>
     {% else %}
-        <img src="{{ url_for('graphic.plot_prediction', crypto='bitcoin-sv', start_date=params[0],
+        <img src="{{ url_for('graphic.plot_prediction', crypto='litecoin', start_date=params[0],
                     months=params[1], min_ci=params[2], max_ci=params[3]) }}"
-             alt="BSV price plot"/>
+             alt="Litecoin price plot"/>
     {% endif %}
 </section>
 {% endblock %}

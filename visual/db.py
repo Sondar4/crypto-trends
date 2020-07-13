@@ -30,9 +30,10 @@ def init_db():
         db.executescript(f.read().decode('utf8'))
 
     # Get data From yahoo finance
-    yf_codes = ['BTC-USD', 'ETH-USD', 'XRP-USD', 'BCH-USD']
+    yf_codes = ['BTC-USD', 'ETH-USD', 'XRP-USD', 'BCH-USD', 'LTC-USD']
     codes_dict = {'BTC-USD': 'bitcoin', 'ETH-USD': 'ethereum',
-                  'XRP-USD': 'ripple', 'BCH-USD': 'bitcoin-cash'}
+                  'XRP-USD': 'ripple', 'BCH-USD': 'bitcoin-cash',
+                  'LTC-USD': 'litecoin'}
     for code in yf_codes:
         crypto = codes_dict[code]
         t = yf.Ticker(code)
@@ -41,9 +42,7 @@ def init_db():
         h['Date'] = h['Date'].dt.strftime('%Y-%m-%d %H:%M:%S')
         vals = [(crypto, row.Date, row.Close) for (_, row) in h.iterrows()]
         db.executemany('INSERT INTO cryptos (crypto, dt, close_price) VALUES (?, ?, ?);', vals)
-        db.commit()
-
-    #TODO: get data of btc-sv 
+        db.commit() 
 
 
 @click.command('init-db')
