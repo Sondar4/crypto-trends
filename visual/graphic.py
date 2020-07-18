@@ -121,21 +121,24 @@ def plot_prediction(crypto, start_date=datetime(2018, 2, 1), months=3, min_ci=0,
     register_matplotlib_converters()
 
     # Set the first date from which we make the prediction.
-    start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+    start_date = datetime.strptime(start_date, '%Y-%m-%d')
 
     months = int(months)
     ci = [int(min_ci), int(max_ci)]
 
     db = get_db()
-
-    data = pd.DataFrame(db.execute(
+    cur = db.cursor()
+    cur.execute(
         'SELECT dt, close_price'
         ' FROM cryptos'
-        ' WHERE crypto = ?', (crypto,)
-    ).fetchall(), columns=['date', 'close_price'])
+        ' WHERE crypto = %s', (crypto,)
+    )
+    
+    data = pd.DataFrame(cur.fetchall(), columns=['date', 'close_price'])
 
     data['id'] = data.index.values.copy()
     data['date'] = pd.to_datetime(data['date'])
+    data['close_price'] = pd.to_numeric(data['close_price'])
 
     # It's the same to make the regression on the id than on the date
     # converted to an int, so we make it on the id.
@@ -222,7 +225,7 @@ def generate_fake_results(original, results, formula):
     
     returns: a fitted least squares model
     """
-    fake = pd.DataFrame(original.id.copy())
+    fake = pd.DataFrame(original.id.copy()) 
     fake['close_price'] = results.fittedvalues + np.random.choice(results.resid, len(results.resid))
     model = smf.ols(formula, data=fake)
     return model.fit()

@@ -1,18 +1,20 @@
 import os
+import configparser
 
 from flask import Flask
 
 
 app = Flask(__name__, instance_relative_config=True)
+config = configparser.ConfigParser()
+config.read('dev.cfg')
 
 app.config.from_mapping(
-    DATABASE=os.path.join(app.instance_path, 'cryptos.sqlite'),
+    HOST=config.get('CLUSTER', 'HOST'),
+    DB_NAME=config.get('CLUSTER', 'DB_NAME'),
+    DB_USER=config.get('CLUSTER', 'DB_USER'),
+    DB_PASSWORD=config.get('CLUSTER', 'DB_PASSWORD'),
+    DB_PORT=config.get('CLUSTER', 'DB_PORT')
 )
-
-try:
-    os.makedirs(app.instance_path)
-except OSError:
-    pass
 
 from visual import db
 db.init_app(app)

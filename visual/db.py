@@ -1,4 +1,4 @@
-import sqlite3
+import psycopg2
 import click
 import yfinance as yf
 
@@ -7,11 +7,13 @@ from flask.cli import with_appcontext
 
 def get_db():
     if 'db' not in g:
-        g.db = sqlite3.connect(
-            current_app.config['DATABASE'],
-            detect_types=sqlite3.PARSE_DECLTYPES
+        g.db = psycopg2.connect(            
+            host = current_app.config['HOST'],
+            dbname = current_app.config['DB_NAME'],
+            user = current_app.config['DB_USER'],
+            password = current_app.config['DB_PASSWORD'],
+            port = current_app.config['DB_PORT']
         )
-        g.db.row_factory = sqlite3.Row
 
     return g.db
 
@@ -27,7 +29,8 @@ def init_db():
     db = get_db()
 
     with current_app.open_resource('schema.sql') as f:
-        db.executescript(f.read().decode('utf8'))
+        cur = db.cursor()
+        cur.execute(f.read().decode('utf8'))
 
     # Get data From yahoo finance
     yf_codes = ['BTC-USD', 'ETH-USD', 'XRP-USD', 'BCH-USD', 'LTC-USD']
@@ -41,7 +44,8 @@ def init_db():
         h['Date'] = h.index
         h['Date'] = h['Date'].dt.strftime('%Y-%m-%d %H:%M:%S')
         vals = [(crypto, row.Date, row.Close) for (_, row) in h.iterrows()]
-        db.executemany('INSERT INTO cryptos (crypto, dt, close_price) VALUES (?, ?, ?);', vals)
+        cur = db.cursor()
+        cur.executemany('INSERT INTO cryptos (crypto, dt, close_price) VALUES (%s, %s, %s);', vals)
         db.commit() 
 
 

@@ -10,6 +10,6 @@ build/
 *.egg-info/
 
 visual/static/images/temp/*
-instance/*.sqlite
 .profile
 TODO.txt
+dev.cfg
