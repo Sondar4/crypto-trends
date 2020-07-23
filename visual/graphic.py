@@ -1,7 +1,6 @@
 from flask import (
     Blueprint, redirect, render_template, request, url_for, send_file
 )
-
 from visual.db import get_db
 
 #--------------------- Imports to generate the plot ---------------------

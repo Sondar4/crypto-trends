@@ -3,63 +3,111 @@
 {% block title %}Litecoin Price Evolution{% endblock %}
 <!-- Swedish palette -->
 {% block style %}
-<style>
-    nav {
-        background-color: #1e272e;
-    }
-    .hero {
-        background-color: #485460;
-    }
-    .hero h1 {
-        color: #0fbcf9;
-    }
-    .parameters {
-        background-color: #485460;
-    }
-    .menu > li a:link,
-    .menu > li a:visited,
-    .menu > li a:active,
-    .menu > li a:visited:active {
-        color: #05c46b;
-    }
-    .menu > li a:hover,
-    .menu > li a:visited:hover {
-        color: #0be881;
-    }
-    .input label {
-        color: #d2dae2;
-    }
-    .button {
-        color: #ff3f34;
-        box-shadow: 0 3px 0 #ff3f34;
-    }
-    .button:hover,
-    .button:visited:hover {
-        color: #ff5e57;
-        box-shadow: 0 2px #ff5e57;
-    }
-    .description {
-        background-color: #1e272e;
-        color: #4bcffa;
-    }
-    .description h1{
-        color: #ef5777;
-    }
-</style>
+    <style>
+        nav {
+            background-color: #1e272e;
+        }
+        .hero {
+            background-color: #485460;
+        }
+        .hero h1 {
+            color: #0fbcf9;
+        }
+        .parameters {
+            background-color: #485460;
+        }
+        .menu > li a:link,
+        .menu > li a:visited,
+        .menu > li a:active,
+        .menu > li a:visited:active {
+            color: #05c46b;
+        }
+        .menu > li a:hover,
+        .menu > li a:visited:hover {
+            color: #0be881;
+        }
+        .input label {
+            color: #d2dae2;
+        }
+        .button {
+            color: #ff3f34;
+            box-shadow: 0 3px 0 #ff3f34;
+        }
+        .button:hover,
+        .button:visited:hover {
+            color: #ff5e57;
+            box-shadow: 0 2px #ff5e57;
+        }
+        .description {
+            background-color: #1e272e;
+            color: #4bcffa;
+        }
+        .description h1{
+            color: #ef5777;
+        }
+    </style>
 {% endblock %}
 
 {% block hero %}
-<h1>Litecoin Price Evolution</h1>
+    <h1>Litecoin Price Evolution</h1>
 {% endblock %}
 
 {% block content %}
-<section class="figure">
+    <section class="figure">
+        {% if not params %}
+            <img src="/static/images/plots/litecoin_default.png" alt="Litecoin price plot"/>
+        {% else %}
+            <img src="{{ url_for('graphic.plot_prediction', crypto='litecoin', start_date=params[0],
+                        months=params[1], min_ci=params[2], max_ci=params[3]) }}"
+                alt="Litecoin price plot"/>
+        {% endif %}
+    </section>
+
     {% if not params %}
-        <img src="/static/images/plots/litecoin_default.png" alt="Litecoin price plot"/>
+        <form method="post" class="parameters">
+            <div class="param-vars">
+                <div class="input">
+                    <label for="pred_from">Predict from:</label>
+                    <input type="date" name="pred_from" id="pred_from" value="2018-02-01"
+                        min="2014-09-17" max="2020-07-23">
+                </div>
+                <div class="input">    
+                    <label for="pred_to">Predict months:</label>
+                    <input type="number" name="pred_to" value=3 id="pred_to">
+                </div>
+                <div class="input">    
+                    <label for="low_perc">Lower percentile:</label>
+                    <input type="number" value=5 name="low_perc" id="low_perc">
+                </div>
+                <div class="input">
+                    <label for="high_perc">Higher percentile:</label>
+                    <input type="number" value=95 name="high_perc" id="high_perc">
+                </div>
+            </div>
+            <input type="submit" value="Plot" class="button">
+        </form>
     {% else %}
-        <img src="{{ url_for('graphic.plot_prediction', crypto='litecoin', start_date=params[0],
-                    months=params[1], min_ci=params[2], max_ci=params[3]) }}"
-             alt="Litecoin price plot"/>
+        <form method="post" class="parameters">
+            <div class="param-vars">
+                <div class="input">
+                    <label for="pred_from">Predict from:</label>
+                    <input type="date" name="pred_from" value={{ params[0] }} id="pred_from" 
+                        min="2014-09-17" max="2020-07-23">
+                </div>
+                <div class="input">    
+                    <label for="pred_to">Predict months:</label>
+                    <input type="number" name="pred_to" value={{ params[1] }} id="pred_to">
+                </div>
+                <div class="input">    
+                    <label for="low_perc">Lower percentile:</label>
+                    <input type="number" name="low_perc" value={{ params[2] }} id="low_perc">
+                </div>
+                <div class="input">
+                    <label for="high_perc">Higher percentile:</label>
+                    <input type="number" name="high_perc" value={{ params[3] }}  id="high_perc">
+                </div>
+            </div>
+            <input type="submit" value="Plot" class="button">
+        </form>
     {% endif %}
-</section>
 {% endblock %}

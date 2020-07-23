@@ -6,17 +6,65 @@
 {% endblock %}
 
 {% block hero %}
-<h1>Bitcoin Price Evolution</h1>
+    <h1>Bitcoin Price Evolution</h1>
 {% endblock %}
 
 {% block content %}
-<section class="figure">
+    <section class="figure">
+        {% if not params %}
+            <img src="/static/images/plots/default_bitcoin.png" alt="Bitcoin price plot"/>
+        {% else %}
+            <img src="{{ url_for('graphic.plot_prediction', crypto='bitcoin', start_date=params[0],
+                        months=params[1], min_ci=params[2], max_ci=params[3]) }}"
+                alt="Bitcoin price plot"/>
+        {% endif %}
+    </section>
+
     {% if not params %}
-        <img src="/static/images/plots/default_bitcoin.png" alt="Bitcoin price plot"/>
+        <form method="post" class="parameters">
+            <div class="param-vars">
+                <div class="input">
+                    <label for="pred_from">Predict from:</label>
+                    <input type="date" name="pred_from" id="pred_from" value="2018-02-01"
+                        min="2014-09-17" max="2020-07-23">
+                </div>
+                <div class="input">    
+                    <label for="pred_to">Predict months:</label>
+                    <input type="number" name="pred_to" value=3 id="pred_to">
+                </div>
+                <div class="input">    
+                    <label for="low_perc">Lower percentile:</label>
+                    <input type="number" value=5 name="low_perc" id="low_perc">
+                </div>
+                <div class="input">
+                    <label for="high_perc">Higher percentile:</label>
+                    <input type="number" value=95 name="high_perc" id="high_perc">
+                </div>
+            </div>
+            <input type="submit" value="Plot" class="button">
+        </form>
     {% else %}
-        <img src="{{ url_for('graphic.plot_prediction', crypto='bitcoin', start_date=params[0],
-                    months=params[1], min_ci=params[2], max_ci=params[3]) }}"
-             alt="Bitcoin price plot"/>
+        <form method="post" class="parameters">
+            <div class="param-vars">
+                <div class="input">
+                    <label for="pred_from">Predict from:</label>
+                    <input type="date" name="pred_from" value={{ params[0] }} id="pred_from" 
+                        min="2014-09-17" max="2020-07-23">
+                </div>
+                <div class="input">    
+                    <label for="pred_to">Predict months:</label>
+                    <input type="number" name="pred_to" value={{ params[1] }} id="pred_to">
+                </div>
+                <div class="input">    
+                    <label for="low_perc">Lower percentile:</label>
+                    <input type="number" name="low_perc" value={{ params[2] }} id="low_perc">
+                </div>
+                <div class="input">
+                    <label for="high_perc">Higher percentile:</label>
+                    <input type="number" name="high_perc" value={{ params[3] }}  id="high_perc">
+                </div>
+            </div>
+            <input type="submit" value="Plot" class="button">
+        </form>
     {% endif %}
-</section>
 {% endblock %}

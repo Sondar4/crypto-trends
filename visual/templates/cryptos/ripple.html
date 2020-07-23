@@ -3,61 +3,109 @@
 {% block title %}Ripple Price Evolution{% endblock %}
 <!-- Chinese palette -->
 {% block style %}
-<style>
-    nav {
-        background-color: #2f3542;
-    }
+    <style>
+        nav {
+            background-color: #2f3542;
+        }
 
-    .hero {
-        background-color: #57606f;
-    }
-    .hero h1 {
-        color: #f1f2f6;
-    }
-    .parameters {
-        background-color: #57606f;
-    }
-    .menu > li a:link,
-    .menu > li a:visited,
-    .menu > li a:active,
-    .menu > li a:visited:active {
-        color: #2ed573;
-    }
-    .menu > li a:hover,
-    .menu > li a:visited:hover {
-        color: #7bed9f;
-    }
-    .input label {
-        color: #dfe4ea;
-    }
-    .button {
-        color: #ff4757;
-        box-shadow: 0 3px 0 #ff4757;
-    }
-    .button:hover,
-    .button:visited:hover {
-        color: #ff6b81;
-        box-shadow: 0 2px #ff6b81;
-    }
-    .description {
-        background-color: #2f3542;
-        color: #dfe4ea;
-    }
-</style>
+        .hero {
+            background-color: #57606f;
+        }
+        .hero h1 {
+            color: #f1f2f6;
+        }
+        .parameters {
+            background-color: #57606f;
+        }
+        .menu > li a:link,
+        .menu > li a:visited,
+        .menu > li a:active,
+        .menu > li a:visited:active {
+            color: #2ed573;
+        }
+        .menu > li a:hover,
+        .menu > li a:visited:hover {
+            color: #7bed9f;
+        }
+        .input label {
+            color: #dfe4ea;
+        }
+        .button {
+            color: #ff4757;
+            box-shadow: 0 3px 0 #ff4757;
+        }
+        .button:hover,
+        .button:visited:hover {
+            color: #ff6b81;
+            box-shadow: 0 2px #ff6b81;
+        }
+        .description {
+            background-color: #2f3542;
+            color: #dfe4ea;
+        }
+    </style>
 {% endblock %}
 
 {% block hero %}
-<h1>Ripple (XRP) Price Evolution</h1>
+    <h1>Ripple (XRP) Price Evolution</h1>
 {% endblock %}
 
 {% block content %}
-<section class="figure">
+    <section class="figure">
+        {% if not params %}
+            <img src="/static/images/plots/ripple_default.png" alt="Ripple price plot"/>
+        {% else %}
+            <img src="{{ url_for('graphic.plot_prediction', crypto='ripple', start_date=params[0],
+                        months=params[1], min_ci=params[2], max_ci=params[3]) }}"
+                alt="Ripple price plot"/>
+        {% endif %}
+    </section>
+
     {% if not params %}
-        <img src="/static/images/plots/ripple_default.png" alt="Ripple price plot"/>
+        <form method="post" class="parameters">
+            <div class="param-vars">
+                <div class="input">
+                    <label for="pred_from">Predict from:</label>
+                    <input type="date" name="pred_from" id="pred_from" value="2018-02-01"
+                        min="2014-09-17" max="2020-07-23">
+                </div>
+                <div class="input">    
+                    <label for="pred_to">Predict months:</label>
+                    <input type="number" name="pred_to" value=3 id="pred_to">
+                </div>
+                <div class="input">    
+                    <label for="low_perc">Lower percentile:</label>
+                    <input type="number" value=5 name="low_perc" id="low_perc">
+                </div>
+                <div class="input">
+                    <label for="high_perc">Higher percentile:</label>
+                    <input type="number" value=95 name="high_perc" id="high_perc">
+                </div>
+            </div>
+            <input type="submit" value="Plot" class="button">
+        </form>
     {% else %}
-        <img src="{{ url_for('graphic.plot_prediction', crypto='ripple', start_date=params[0],
-                    months=params[1], min_ci=params[2], max_ci=params[3]) }}"
-             alt="Ripple price plot"/>
+        <form method="post" class="parameters">
+            <div class="param-vars">
+                <div class="input">
+                    <label for="pred_from">Predict from:</label>
+                    <input type="date" name="pred_from" value={{ params[0] }} id="pred_from" 
+                        min="2014-09-17" max="2020-07-23">
+                </div>
+                <div class="input">    
+                    <label for="pred_to">Predict months:</label>
+                    <input type="number" name="pred_to" value={{ params[1] }} id="pred_to">
+                </div>
+                <div class="input">    
+                    <label for="low_perc">Lower percentile:</label>
+                    <input type="number" name="low_perc" value={{ params[2] }} id="low_perc">
+                </div>
+                <div class="input">
+                    <label for="high_perc">Higher percentile:</label>
+                    <input type="number" name="high_perc" value={{ params[3] }}  id="high_perc">
+                </div>
+            </div>
+            <input type="submit" value="Plot" class="button">
+        </form>
     {% endif %}
-</section>
 {% endblock %}
